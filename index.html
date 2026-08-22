@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; }
+    body { background:#0a0a0f; color:#e2e2e8; min-height:100vh; padding:16px; }
+    .wrap { max-width:380px; margin:0 auto; }
+    .header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+    .brand { display:flex; align-items:center; gap:8px; font-size:18px; font-weight:600; letter-spacing:0.5px; }
+    .brand svg { color:#00f0ff; }
+    .points { display:flex; align-items:center; gap:4px; font-size:14px; font-weight:500; color:#f0b040; background:rgba(240,176,64,0.1); padding:4px 10px; border-radius:20px; }
+    .card { background:#13131f; border:1px solid #1e1e2a; border-radius:12px; padding:16px; text-align:center; margin-bottom:16px; }
+    .round-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    .badge { font-size:12px; color:#6b6b80; background:#0a0a0f; padding:3px 10px; border-radius:6px; }
+    .live { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:500; color:#39ff14; }
+    .dot { width:7px; height:7px; background:#39ff14; border-radius:50%; animation:blink 1.4s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .asset-icon { width:36px; height:36px; border-radius:50%; background:rgba(240,176,64,0.15); color:#f0b040; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:600; margin:0 auto 8px; }
+    .asset-name { font-size:16px; font-weight:500; }
+    .asset-pair { font-size:12px; color:#6b6b80; margin-top:2px; }
+    .price { font-size:36px; font-weight:600; line-height:1.1; margin:8px 0 4px; }
+    .change { font-size:14px; font-weight:500; color:#39ff14; margin-bottom:12px; }
+    .timer-box { display:inline-flex; align-items:center; gap:6px; background:#0a0a0f; border:1px solid #1e1e2a; border-radius:8px; padding:6px 12px; color:#6b6b80; font-size:12px; }
+    .timer-box strong { color:#e2e2e8; font-size:14px; margin-left:4px; }
+    .actions { display:flex; gap:12px; margin-bottom:16px; }
+    .btn { flex:1; display:flex; align-items:center; justify-content:center; gap:8px; padding:16px; border-radius:10px; border:none; font-size:16px; font-weight:600; color:#fff; cursor:pointer; }
+    .btn-up { background:#39ff14; box-shadow:0 0 0 rgba(57,255,20,0); }
+    .btn-down { background:#ff006e; box-shadow:0 0 0 rgba(255,0,110,0); }
+    .btn:active { transform:scale(0.97); }
+    .picked { background:#13131f; border:1px solid #1e1e2a; border-radius:12px; padding:20px; text-align:center; margin-bottom:16px; display:none; }
+    .picked-icon { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-size:24px; }
+    .picked-text { font-size:16px; color:#6b6b80; margin-bottom:4px; }
+    .picked-text strong { color:#e2e2e8; }
+    .section-title { font-size:13px; color:#6b6b80; margin-bottom:10px; }
+    .results { display:flex; flex-direction:column; gap:8px; }
+    .result { display:flex; align-items:center; justify-content:space-between; background:#13131f; border:1px solid #1e1e2a; border-radius:10px; padding:10px 12px; font-size:13px; }
+    .result-round { color:#6b6b80; }
+    .result-dir { display:flex; align-items:center; gap:4px; font-weight:500; }
+    .result.up .result-dir { color:#39ff14; }
+    .result.down .result-dir { color:#ff006e; }
+    .status { font-size:12px; font-weight:500; padding:2px 8px; border-radius:6px; }
+    .win { color:#39ff14; background:rgba(57,255,20,0.1); }
+    .loss { color:#ff006e; background:rgba(255,0,110,0.1); }
+    .nav { display:flex; gap:8px; border-top:1px solid #1e1e2a; padding-top:12px; margin-top:16px; }
+    .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; padding:8px; border-radius:10px; border:none; background:transparent; color:#6b6b80; font-size:12px; }
+    .nav-item.active { color:#e2e2e8; background:#1a1a26; }
+    .result.up .status.win { color:#39ff14; }
+    .result.down .status.loss { color:#ff006e; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Header -->
+    <div class="header">
+      <div class="brand">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 3v18l5-5 5 5 5-5"/></svg>
+        Pulse
+      </div>
+      <div class="points">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1.9l2.3 6.8L21.5 10l-5.2 3.8L17.7 21 12 17.2 6.3 21l1.4-7.2L2.5 10l6.9-1.3z"/></svg>
+        1,240
+      </div>
+    </div>
+
+    <!-- Card -->
+    <div class="card">
+      <div class="round-row">
+        <span class="badge">Round #42</span>
+        <div class="live">
+          <span class="dot"></span>
+          Live
+        </div>
+      </div>
+      <div class="asset-icon">₿</div>
+      <div class="asset-name">Bitcoin</div>
+      <div class="asset-pair">BTC / USDT</div>
+      <div class="price" id="price">$87,432.15</div>
+      <div class="change" id="change">+1.24%</div>
+      <div class="timer-box">
+        Lock in <strong id="timer">04:32</strong>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions" id="actions">
+      <button class="btn btn-up" onclick="pick('up')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 21V3m0 0l-7 7m7-7l7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Up
+      </button>
+      <button class="btn btn-down" onclick="pick('down')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3v18m0 0l-7-7m7 7l7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Down
+      </button>
+    </div>
+
+    <div class="picked" id="picked">
+      <div class="picked-icon" id="pickedIcon"></div>
+      <div class="picked-text">You picked <strong id="pickedDir">Up</strong></div>
+      <div style="font-size:13px;color:#6b6b80;margin-top:4px;">Lock in <span id="pickedTimer">04:32</span></div>
+    </div>
+
+    <!-- Results -->
+    <div class="section-title">Last rounds</div>
+    <div class="results">
+      <div class="result up">
+        <span class="result-round">#41</span>
+        <span class="result-dir" style="color:#39ff14;">Up</span>
+        <span class="status win">Win</span>
+      </div>
+      <div class="result down">
+        <span class="result-round">#40</span>
+        <span class="result-dir" style="color:#ff006e;">Down</span>
+        <span class="status loss">Loss</span>
+      </div>
+      <div class="result up">
+        <span class="result-round">#39</span>
+        <span class="result-dir" style="color:#39ff14;">Up</span>
+        <span class="status win">Win</span>
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <div class="nav">
+      <div class="nav-item active">Predict</div>
+      <div class="nav-item">Profile</div>
+    </div>
+  </div>
+
+  <script>
+    let s = 272, p = 87432.15;
+    function fmt(t){const m=Math.floor(t/60).toString().padStart(2,'0');const sc=(t%60).toString().padStart(2,'0');return m+':'+sc;}
+    function fmtP(n){return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+    setInterval(()=>{s--;if(s<0)s=600;document.getElementById('timer').textContent=fmt(s);document.getElementById('pickedTimer').textContent=fmt(s);},1000);
+    setInterval(()=>{p+=(Math.random()-0.48)*12;const c=((p-86200)/86200*100);document.getElementById('price').textContent=fmtP(p);document.getElementById('change').textContent=(c>=0?'+':'')+c.toFixed(2)+'%';document.getElementById('change').style.color=c>=0?'#39ff14':'#ff006e';},2200);
+    function pick(d){
+      document.getElementById('actions').style.display='none';
+      document.getElementById('picked').style.display='block';
+      document.getElementById('pickedDir').textContent=d==='up'?'Up':'Down';
+      const i=document.getElementById('pickedIcon');
+      i.style.background=d==='up'?'rgba(57,255,20,0.15)':'rgba(255,0,110,0.15)';
+      i.style.color=d==='up'?'#39ff14':'#ff006e';
+      i.innerHTML=d==='up'?
+        '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 21V3m0 0l-7 7m7-7l7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>':
+        '<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3v18m0 0l-7-7m7 7l7-7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }
+  </script>
+</body>
+  </html>
+            
