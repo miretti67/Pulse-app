@@ -1,1327 +1,786 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Pulse</title>
-
-<style>
-/* =========================================================
-   PULSE — RETRO GAME UI
-   Vanilla HTML / CSS / JS
-   ========================================================= */
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-}
-
-:root {
-  --orange: #ff7417;
-  --orange-light: #ffad4a;
-  --orange-dark: #df4e00;
-
-  --cream: #fff1d2;
-  --cream-light: #fff8e8;
-  --paper: #ffe4af;
-
-  --black: #17130f;
-  --brown: #754522;
-
-  --green: #62d957;
-  --red: #ff5145;
-  --yellow: #ffd43b;
-  --blue: #69c8ff;
-
-  --border: 3px solid var(--black);
-  --shadow: 5px 5px 0 var(--black);
-  --shadow-small: 3px 3px 0 var(--black);
-
-  --radius: 14px;
-}
-
-html,
-body {
-  min-height: 100%;
-}
-
-body {
-  font-family:
-    "Arial Black",
-    "Trebuchet MS",
-    system-ui,
-    sans-serif;
-
-  color: var(--black);
-
-  background-color: var(--cream);
-
-  background-image:
-    radial-gradient(
-      circle,
-      rgba(23, 19, 15, .08) 1.5px,
-      transparent 1.5px
-    );
-
-  background-size: 18px 18px;
-
-  overflow-x: hidden;
-}
-
-/* =========================================================
-   APP
-   ========================================================= */
-
-.app {
-  width: min(100%, 430px);
-  min-height: 100vh;
-  margin: auto;
-  padding: 14px 14px 110px;
-}
-
-/* =========================================================
-   DECORATION
-   ========================================================= */
-
-.star {
-  position: fixed;
-  z-index: -1;
-  font-size: 26px;
-  pointer-events: none;
-}
-
-.star.one {
-  top: 80px;
-  left: 10px;
-  transform: rotate(-15deg);
-}
-
-.star.two {
-  top: 290px;
-  right: 8px;
-  transform: rotate(18deg);
-}
-
-.star.three {
-  bottom: 150px;
-  left: 8px;
-  transform: rotate(12deg);
-  font-size: 18px;
-}
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-
-.brand-icon {
-  width: 40px;
-  height: 40px;
-
-  display: grid;
-  place-items: center;
-
-  background: var(--orange);
-  border: var(--border);
-  border-radius: 11px;
-
-  box-shadow: var(--shadow-small);
-
-  font-size: 22px;
-}
-
-.brand-name {
-  font-size: 26px;
-  line-height: 1;
-  font-weight: 1000;
-  letter-spacing: -1.5px;
-}
-
-.brand-sub {
-  display: block;
-  margin-top: 3px;
-  font-family: Arial, sans-serif;
-  font-size: 9px;
-  font-weight: 900;
-  letter-spacing: 1.2px;
-  opacity: .55;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.points-pill {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-
-  padding: 8px 10px;
-
-  background: var(--yellow);
-  border: var(--border);
-  border-radius: 10px;
-
-  box-shadow: var(--shadow-small);
-
-  font-size: 12px;
-  font-weight: 1000;
-}
-
-.avatar-small {
-  width: 39px;
-  height: 39px;
-
-  display: grid;
-  place-items: center;
-
-  background: var(--blue);
-  border: var(--border);
-  border-radius: 50%;
-
-  box-shadow: 3px 3px 0 var(--black);
-
-  font-size: 15px;
-  font-weight: 1000;
-}
-
-/* =========================================================
-   SCREEN
-   ========================================================= */
-
-.screen {
-  display: none;
-}
-
-.screen.active {
-  display: block;
-}
-
-/* =========================================================
-   CARDS
-   ========================================================= */
-
-.card {
-  position: relative;
-
-  background: var(--cream-light);
-
-  border: var(--border);
-  border-radius: var(--radius);
-
-  box-shadow: var(--shadow);
-
-  padding: 17px;
-  margin-bottom: 18px;
-}
-
-.card.orange {
-  background: var(--orange);
-}
-
-.card.yellow {
-  background: var(--yellow);
-}
-
-.card.blue {
-  background: var(--blue);
-}
-
-/* =========================================================
-   BITCOIN HERO
-   ========================================================= */
-
-.price-card {
-  overflow: hidden;
-  min-height: 235px;
-}
-
-.price-card::after {
-  content: "₿";
-
-  position: absolute;
-  right: -12px;
-  bottom: -30px;
-
-  font-family: Arial, sans-serif;
-  font-size: 180px;
-  font-weight: 1000;
-
-  color: rgba(23, 19, 15, .07);
-
-  transform: rotate(-12deg);
-
-  pointer-events: none;
-}
-
-.price-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  position: relative;
-  z-index: 2;
-
-  margin-bottom: 14px;
-}
-
-.coin-tag {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-
-  font-size: 12px;
-  font-weight: 1000;
-}
-
-.btc-icon {
-  width: 28px;
-  height: 28px;
-
-  display: grid;
-  place-items: center;
-
-  background: var(--orange);
-  border: 2px solid var(--black);
-  border-radius: 50%;
-
-  font-size: 16px;
-}
-
-.live-badge {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-
-  padding: 5px 8px;
-
-  background: var(--green);
-  border: 2px solid var(--black);
-  border-radius: 7px;
-
-  font-size: 9px;
-  font-weight: 1000;
-}
-
-.live-dot {
-  width: 7px;
-  height: 7px;
-  background: var(--black);
-  border-radius: 50%;
-  animation: blink .8s infinite;
-}
-
-@keyframes blink {
-  50% {
-    opacity: .25;
-  }
-}
-
-.price-content {
-  position: relative;
-  z-index: 2;
-}
-
-.price-label {
-  font-family: Arial, sans-serif;
-  font-size: 10px;
-  font-weight: 900;
-  opacity: .55;
-  letter-spacing: 1px;
-}
-
-.price-main {
-  margin-top: 3px;
-
-  font-size: clamp(34px, 10vw, 48px);
-  line-height: .95;
-  font-weight: 1000;
-  letter-spacing: -3px;
-}
-
-.price-change {
-  margin-top: 8px;
-
-  font-family: Arial, sans-serif;
-  font-size: 13px;
-  font-weight: 900;
-}
-
-.price-change.up {
-  color: #15951a;
-}
-
-.price-change.down {
-  color: var(--red);
-}
-
-.mini-chart {
-  height: 45px;
-
-  display: flex;
-  align-items: end;
-  justify-content: flex-end;
-  gap: 3px;
-
-  margin-top: 12px;
-}
-
-.mini-chart-bar {
-  width: 4px;
-  background: var(--black);
-  border-radius: 2px 2px 0 0;
-  opacity: .75;
-}
-
-/* =========================================================
-   MASCOT
-   ========================================================= */
-
-.mascot-wrap {
-  position: absolute;
-  right: 18px;
-  bottom: 15px;
-
-  z-index: 3;
-}
-
-.mascot {
-  width: 90px;
-  height: 90px;
-
-  display: grid;
-  place-items: center;
-
-  background: var(--orange-light);
-
-  border: 4px solid var(--black);
-  border-radius: 50% 45% 48% 42%;
-
-  box-shadow: 5px 5px 0 var(--black);
-
-  font-size: 48px;
-
-  transform: rotate(5deg);
-
-  animation: mascotFloat 2.4s ease-in-out infinite;
-}
-
-@keyframes mascotFloat {
-  0%, 100% {
-    transform: rotate(5deg) translateY(0);
-  }
-
-  50% {
-    transform: rotate(-3deg) translateY(-5px);
-  }
-}
-
-/* =========================================================
-   ROUND TIMER
-   ========================================================= */
-
-.timer-card {
-  text-align: center;
-  padding: 18px 14px 20px;
-}
-
-.timer-title {
-  font-size: 12px;
-  font-weight: 1000;
-  text-transform: uppercase;
-  letter-spacing: .5px;
-  margin-bottom: 13px;
-}
-
-.timer-ring-wrap {
-  width: 148px;
-  height: 148px;
-
-  margin: auto;
-
-  position: relative;
-
-  background: var(--orange-light);
-
-  border: 4px solid var(--black);
-  border-radius: 50%;
-
-  box-shadow: 6px 6px 0 var(--black);
-}
-
-.timer-ring-svg {
-  width: 148px;
-  height: 148px;
-
-  transform: rotate(-90deg);
-}
-
-.timer-ring-bg {
-  fill: none;
-  stroke: rgba(23,19,15,.13);
-  stroke-width: 7;
-}
-
-.timer-ring-fill {
-  fill: none;
-  stroke: var(--black);
-  stroke-width: 7;
-  stroke-linecap: round;
-
-  stroke-dasharray: 377;
-  stroke-dashoffset: 0;
-
-  transition: stroke-dashoffset 1s linear;
-}
-
-.timer-center {
-  position: absolute;
-  inset: 0;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.timer-label {
-  font-family: Arial, sans-serif;
-  font-size: 9px;
-  font-weight: 900;
-  text-transform: uppercase;
-  opacity: .55;
-}
-
-.timer-value {
-  margin-top: 3px;
-
-  font-size: 35px;
-  line-height: 1;
-  font-weight: 1000;
-  letter-spacing: -2px;
-}
-
-/* =========================================================
-   DURATION
-   ========================================================= */
-
-.time-section {
-  margin-bottom: 18px;
-}
-
-.section-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  margin-bottom: 9px;
-}
-
-.section-heading h3 {
-  font-size: 14px;
-  font-weight: 1000;
-  text-transform: uppercase;
-}
-
-.section-heading span {
-  font-family: Arial, sans-serif;
-  font-size: 9px;
-  font-weight: 900;
-  opacity: .5;
-}
-
-.time-options {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 7px;
-}
-
-.time-btn {
-  min-height: 57px;
-
-  background: var(--cream-light);
-
-  border: 3px solid var(--black);
-  border-radius: 9px;
-
-  box-shadow: 3px 3px 0 var(--black);
-
-  color: var(--black);
-
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 1000;
-
-  cursor: pointer;
-
-  transition:
-    transform .1s,
-    box-shadow .1s,
-    background .1s;
-}
-
-.time-btn:active {
-  transform: translate(2px,2px);
-  box-shadow: 1px 1px 0 var(--black);
-}
-
-.time-btn.active {
-  background: var(--orange);
-}
-
-.time-btn .reward {
-  display: block;
-
-  margin-top: 3px;
-
-  font-family: Arial, sans-serif;
-  font-size: 8px;
-  font-weight: 900;
-  opacity: .65;
-}
-
-/* =========================================================
-   PREDICTION BUTTONS
-   ========================================================= */
-
-.actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-
-  margin-bottom: 18px;
-}
-
-.btn {
-  min-height: 118px;
-
-  position: relative;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  gap: 3px;
-
-  border: 4px solid var(--black);
-  border-radius: 14px;
-
-  color: var(--black);
-
-  font-family: inherit;
-
-  cursor: pointer;
-
-  box-shadow: 6px 6px 0 var(--black);
-
-  transition:
-    transform .1s,
-    box-shadow .1s;
-}
-
-.btn:active {
-  transform: translate(5px,5px);
-  box-shadow: 1px 1px 0 var(--black);
-}
-
-.btn-up {
-  background: var(--green);
-}
-
-.btn-down {
-  background: var(--red);
-}
-
-.btn-arrow {
-  font-family: Arial, sans-serif;
-  font-size: 34px;
-  line-height: .8;
-  font-weight: 1000;
-}
-
-.btn-label {
-  font-size: 22px;
-  font-weight: 1000;
-  letter-spacing: 1px;
-}
-
-.btn-sub {
-  font-family: Arial, sans-serif;
-  font-size: 9px;
-  font-weight: 900;
-  opacity: .65;
-}
-
-/* =========================================================
-   LOCKED STATE
-   ========================================================= */
-
-.locked-state {
-  display: none;
-}
-
-.locked-state.show {
-  display: block;
-  text-align: center;
-  background: var(--orange-light);
-}
-
-.locked-mascot {
-  font-size: 55px;
-  margin-bottom: 8px;
-}
-
-.locked-title {
-  font-size: 19px;
-  font-weight: 1000;
-}
-
-.locked-direction {
-  margin-top: 4px;
-
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-  font-weight: 900;
-}
-
-.locked-timer {
-  margin-top: 10px;
-
-  font-size: 28px;
-  font-weight: 1000;
-}
-
-/* =========================================================
-   LAST ROUNDS
-   ========================================================= */
-
-.rounds-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.round-item {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  align-items: center;
-  gap: 10px;
-
-  padding: 11px;
-
-  background: var(--cream-light);
-
-  border: 3px solid var(--black);
-  border-radius: 10px;
-
-  box-shadow: var(--shadow-small);
-}
-
-.round-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.round-time {
-  font-family: Arial, sans-serif;
-  font-size: 9px;
-  font-weight: 900;
-  opacity: .5;
-}
-
-.round-price {
-  font-size: 12px;
-  font-weight: 1000;
-}
-
-.round-result {
-  padding: 5px 7px;
-
-  border: 2px solid var(--black);
-  border-radius: 6px;
-
-  font-size: 10px;
-  font-weight: 1000;
-}
-
-.round-result.win {
-  background: var(--green);
-}
-
-.round-result.loss {
-  background: var(--red);
-}
-
-.round-pts {
-  font-family: Arial, sans-serif;
-  font-size: 10px;
-  font-weight: 1000;
-}
-
-/* =========================================================
-   PROFILE
-   ========================================================= */
-
-.profile-top {
-  text-align: center;
-  padding: 8px 0 18px;
-}
-
-.profile-avatar {
-  width: 92px;
-  height: 92px;
-
-  display: grid;
-  place-items: center;
-
-  margin: auto;
-
-  background: var(--blue);
-
-  border: 4px solid var(--black);
-  border-radius: 50%;
-
-  box-shadow: 6px 6px 0 var(--black);
-
-  font-size: 38px;
-  font-weight: 1000;
-}
-
-.profile-name {
-  margin-top: 14px;
-
-  font-size: 22px;
-  font-weight: 1000;
-}
-
-.profile-handle {
-  margin-top: 2px;
-
-  font-family: Arial, sans-serif;
-  font-size: 11px;
-  font-weight: 800;
-  opacity: .5;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 8px;
-}
-
-.stat-box {
-  padding: 13px 5px;
-
-  background: var(--cream-light);
-
-  border: 3px solid var(--black);
-  border-radius: 10px;
-
-  box-shadow: var(--shadow-small);
-
-  text-align: center;
-}
-
-.stat-value {
-  font-size: 19px;
-  font-weight: 1000;
-}
-
-.stat-label {
-  margin-top: 4px;
-
-  font-family: Arial, sans-serif;
-  font-size: 8px;
-  font-weight: 900;
-  opacity: .55;
-  text-transform: uppercase;
-}
-
-.streak-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-
-  margin-top: 16px;
-
-  padding: 8px 12px;
-
-  background: var(--orange);
-
-  border: 3px solid var(--black);
-  border-radius: 9px;
-
-  box-shadow: var(--shadow-small);
-
-  font-size: 11px;
-  font-weight: 1000;
-}
-
-.level-bar {
-  margin-top: 18px;
-}
-
-.level-header {
-  display: flex;
-  justify-content: space-between;
-
-  margin-bottom: 6px;
-
-  font-family: Arial, sans-serif;
-  font-size: 9px;
-  font-weight: 900;
-}
-
-.level-track {
-  height: 14px;
-
-  background: var(--paper);
-
-  border: 3px solid var(--black);
-  border-radius: 7px;
-
-  overflow: hidden;
-}
-
-.level-fill {
-  width: 72%;
-  height: 100%;
-
-  background: var(--orange);
-
-  border-right: 3px solid var(--black);
-}
-
-/* =========================================================
-   LEADERBOARD
-   ========================================================= */
-
-.leader-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  margin-bottom: 16px;
-}
-
-.leader-title h2 {
-  font-size: 22px;
-  font-weight: 1000;
-}
-
-.leader-title span {
-  font-family: Arial, sans-serif;
-  font-size: 9px;
-  font-weight: 900;
-  opacity: .5;
-}
-
-.podium {
-  display: flex;
-  align-items: end;
-  justify-content: center;
-
-  gap: 8px;
-
-  margin: 10px 0 24px;
-}
-
-.podium-item {
-  width: 31%;
-  text-align: center;
-}
-
-.podium-avatar {
-  width: 55px;
-  height: 55px;
-
-  display: grid;
-  place-items: center;
-
-  margin: auto;
-
-  border: 3px solid var(--black);
-  border-radius: 50%;
-
-  box-shadow: 3px 3px 0 var(--black);
-
-  font-size: 18px;
-  font-weight: 1000;
-}
-
-.podium-item:nth-child(1) .podium-avatar {
-  background: var(--yellow);
-}
-
-.podium-item:nth-child(2) .podium-avatar {
-  background: #d3d3d3;
-}
-
-.podium-item:nth-child(3) .podium-avatar {
-  background: #d58a4c;
-}
-
-.podium-rank {
-  margin-top: 7px;
-
-  font-size: 12px;
-  font-weight: 1000;
-}
-
-.podium-name {
-  margin-top: 3px;
-
-  font-family: Arial, sans-serif;
-  font-size: 9px;
-  font-weight: 900;
-}
-
-.podium-pts {
-  margin-top: 3px;
-
-  font-size: 10px;
-  font-weight: 1000;
-}
-
-.leader-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.leader-item {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-
-  padding: 9px;
-
-  background: var(--cream-light);
-
-  border: 3px solid var(--black);
-  border-radius: 10px;
-
-  box-shadow: 3px 3px 0 var(--black);
-}
-
-.leader-item.you {
-  background: var(--orange-light);
-}
-
-.leader-rank {
-  width: 25px;
-
-  font-size: 12px;
-  font-weight: 1000;
-  text-align: center;
-}
-
-.leader-avatar {
-  width: 36px;
-  height: 36px;
-
-  display: grid;
-  place-items: center;
-
-  background: var(--blue);
-
-  border: 2px solid var(--black);
-  border-radius: 50%;
-
-  font-size: 11px;
-  font-weight: 1000;
-}
-
-.leader-info {
-  flex: 1;
-}
-
-.leader-name {
-  font-size: 11px;
-  font-weight: 1000;
-}
-
-.leader-pts {
-  margin-top: 2px;
-
-  font-family: Arial, sans-serif;
-  font-size: 9px;
-  font-weight: 900;
-  opacity: .55;
-}
-
-.you-badge {
-  display: inline-block;
-
-  margin-left: 4px;
-  padding: 2px 4px;
-
-  background: var(--black);
-  color: var(--cream);
-
-  border-radius: 3px;
-
-  font-size: 7px;
-}
-
-/* =========================================================
-   BOTTOM NAV
-   ========================================================= */
-
-.bottom-nav {
-  position: fixed;
-
-  z-index: 50;
-
-  left: 50%;
-  bottom: 0;
-
-  transform: translateX(-50%);
-
-  width: min(100%, 430px);
-
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 7px;
-
-  padding: 8px 12px 18px;
-
-  background: var(--orange);
-
-  border-top: 3px solid var(--black);
-}
-
-.nav-item {
-  min-height: 49px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  gap: 3px;
-
-  background: transparent;
-
-  border: 0;
-  border-radius: 9px;
-
-  color: rgba(23,19,15,.55);
-
-  font-family: inherit;
-  font-size: 9px;
-  font-weight: 1000;
-  text-transform: uppercase;
-
-  cursor: pointer;
-}
-
-.nav-icon {
-  font-size: 19px;
-  line-height: 1;
-}
-
-.nav-item.active {
-  background: var(--cream-light);
-  color: var(--black);
-
-  border: 2px solid var(--black);
-
-  box-shadow: 3px 3px 0 var(--black);
-}
-
-/* =========================================================
-   RESULT OVERLAY
-   ========================================================= */
-
-.result-overlay {
-  position: fixed;
-  inset: 0;
-
-  z-index: 100;
-
-  display: none;
-  align-items: center;
-  justify-content: center;
-
-  padding: 20px;
-
-  background: rgba(23,19,15,.72);
-}
-
-.result-overlay.show {
-  display: flex;
-}
-
-.result-box {
-  width: min(100%, 350px);
-
-  padding: 25px 20px;
-
-  background: var(--cream);
-
-  border: 4px solid var(--black);
-  border-radius: 17px;
-
-  box-shadow: 9px 9px 0 var(--black);
-
-  text-align: center;
-
-  animation: pop .25s ease-out;
-}
-
-@keyframes pop {
-  from {
-    transform: scale(.75) rotate(-3deg);
-    opacity: 0;
-  }
-
-  to {
-    transform: scale(1) rotate(0);
-    opacity: 1;
-  }
-}
-
-.result-mascot {
-  font-size: 65px;
-  line-height: 1;
-}
-
-.result-title {
-  margin-top: 12px;
-
-  font-size: 31px;
-  font-weight: 1000;
-  letter-spacing: -1px;
-}
-
-.result-title.win {
-  color: #168b20;
-}
-
-.result-title.loss {
-  color: var(--red);
-}
-
-.result-details {
-  margin-top: 8px;
-
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-  font-weight: 800;
-  opacity: .6;
-}
-
-.result-points {
-  margin: 15px 0;
-
-  font-size: 23px;
-  font-weight: 1000;
-}
-
-.btn-close {
-  width: 100%;
-
-  padding: 14px;
-
-  background: var(--orange);
-
-  border: 3px solid var(--black);
-  border-radius: 10px;
-
-  box-shadow: 4px 4px 0 var(--black);
-
-  color: var(--black);
-
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 1000;
-
-  cursor: pointer;
-}
-
-.btn-close:active {
-  transform: translate(3px,3px);
-  box-shadow: 1px 1px 0 var(--black);
-}
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 350px) {
-
-  .app {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .price-main {
-    font-size: 32px;
-  }
-
-  .mascot {
-    width: 72px;
-    height: 72px;
-    font-size: 38px;
-  }
-
-  .time-btn {
-    font-size: 11px;
-  }
-
-  .btn {
-    min-height: 105px;
-  }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulse — Redesigned</title>
+  <style>
+    /* ========== CSS Variables ========== */
+    :root {
+      --bg: #0a0e1a;
+      --surface: rgba(255, 255, 255, 0.03);
+      --surface-hover: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-active: rgba(0, 212, 255, 0.5);
+      --text-primary: #ffffff;
+      --text-secondary: #8b92b9;
+      --text-muted: #5a5f7a;
+      --accent: #00d4ff;
+      --accent-glow: rgba(0, 212, 255, 0.2);
+      --success: #00e676;
+      --success-glow: rgba(0, 230, 118, 0.2);
+      --error: #ff5252;
+      --error-glow: rgba(255, 82, 82, 0.2);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --radius-lg: 24px;
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ========== Reset & Base ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      min-height: 100vh;
+      line-height: 1.4;
+      overflow-x: hidden;
+      padding-bottom: 80px;
+    }
+
+    /* ========== Layout ========== */
+    .wrap {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* ========== Header ========== */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent), #0077ff);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .points-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .points-pill svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--accent);
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* ========== Cards ========== */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: background var(--transition), border var(--transition);
+    }
+
+    /* ========== Price Card ========== */
+    .price-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .coin-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .coin-icon {
+      width: 24px;
+      height: 24px;
+      background: #f7931a;
+      color: #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .live-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-glow);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .price-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .price-main {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .price-change {
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .price-change.up { color: var(--success); }
+    .price-change.down { color: var(--error); }
+
+    .sparkline {
+      flex-shrink: 0;
+      width: 100px;
+      height: 40px;
+    }
+
+    /* ========== Timer Card ========== */
+    .timer-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 0;
+    }
+
+    .timer-ring-wrap {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin-bottom: 20px;
+    }
+
+    .timer-ring-svg {
+      transform: rotate(-90deg);
+      width: 140px;
+      height: 140px;
+    }
+
+    .timer-ring-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.08);
+      stroke-width: 4;
+    }
+
+    .timer-ring-fill {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-dasharray: 377;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear;
+      filter: drop-shadow(0 0 6px var(--accent-glow));
+    }
+
+    .timer-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .timer-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .timer-value {
+      font-size: 32px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .time-selector {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .time-btn {
+      flex: 1;
+      max-width: 80px;
+      padding: 10px 0;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      font-family: inherit;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .time-btn:hover {
+      background: var(--surface-hover);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .time-btn:active {
+      transform: scale(0.96);
+    }
+
+    .time-btn.active {
+      border-color: var(--border-active);
+      background: var(--accent-glow);
+      color: var(--accent);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .time-btn .reward {
+      display: block;
+      font-size: 10px;
+      font-weight: 500;
+      margin-top: 2px;
+      opacity: 0.7;
+    }
+
+    /* ========== Action Buttons ========== */
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 18px 16px;
+      border-radius: var(--radius);
+      border: none;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn svg {
+      width: 24px;
+      height: 24px;
+      transition: transform var(--transition);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .btn .btn-label {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .btn .btn-sub {
+      font-size: 11px;
+      opacity: 0.8;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .btn-up {
+      background: linear-gradient(135deg, rgba(0, 230, 118, 0.2), rgba(0, 230, 118, 0.05));
+      border: 1.5px solid rgba(0, 230, 118, 0.3);
+      box-shadow: 0 4px 20px var(--success-glow);
+    }
+
+    .btn-up:hover {
+      border-color: rgba(0, 230, 118, 0.6);
+      box-shadow: 0 8px 30px var(--success-glow);
+    }
+
+    .btn-down {
+      background: linear-gradient(135deg, rgba(255, 82, 82, 0.2), rgba(255, 82, 82, 0.05));
+      border: 1.5px solid rgba(255, 82, 82, 0.3);
+      box-shadow: 0 4px 20px var(--error-glow);
+    }
+
+    .btn-down:hover {
+      border-color: rgba(255, 82, 82, 0.6);
+      box-shadow: 0 8px 30px var(--error-glow);
+    }
+
+    /* ========== Locked State ========== */
+    .locked-card {
+      display: none;
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    .locked-card .locked-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .locked-card .locked-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .locked-card .locked-dir {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .locked-card .locked-timer {
+      font-size: 28px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ========== Last Rounds ========== */
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-primary);
+    }
+
+    .rounds-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .round-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+    }
+
+    .round-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .round-time {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .round-price {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .round-result {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .round-result.win { color: var(--success); }
+    .round-result.loss { color: var(--error); }
+    .round-pts {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* ========== Bottom Nav ========== */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(10, 14, 26, 0.9);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 16px calc(8px + env(safe-area-inset-bottom));
+      z-index: 50;
+    }
+
+    .nav-item {
+      flex: 1;
+      max-width: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .nav-item:hover {
+      background: var(--surface-hover);
+    }
+
+    .nav-item.active {
+      color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    /* ========== Result Overlay ========== */
+    .result-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(10, 14, 26, 0.95);
+      backdrop-filter: blur(10px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .result-overlay.show {
+      display: flex;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .result-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+
+    .result-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .result-title.win { color: var(--success); }
+    .result-title.loss { color: var(--error); }
+
+    .result-details {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .result-points {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+
+    .btn-close {
+      background: linear-gradient(90deg, var(--accent), #0077ff);
+      color: #fff;
+      border: none;
+      padding: 14px 48px;
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all var(--transition);
+    }
+
+    .btn-close:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 212, 255, 0.3);
+    }
+
+    .btn-close:active {
+      transform: scale(0.97);
+    }
+
+    /* ========== Utility ========== */
+    .hidden {
+      display: none !important;
+    }
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <!-- SVG Defs for Gradient -->
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#00d4ff"/>
+          <stop offset="100%" stop-color="#0077ff"/>
+        </linearGradient>
+      </defs>
+    </svg>
 
-<div class="star one">✦</div>
-<div class="star two">✦</div>
-<div class="star three">✦</div>
-
-<div class="app">
-
-  <!-- =====================================================
-       HEADER
-       ===================================================== -->
-
-  <header class="header">
-
-    <div class="brand">
-
-      <div class="brand-icon">⚡</div>
-
-      <div>
-        <div class="brand-name">PULSE</div>
-        <span class="brand-sub">PREDICT THE MOVE</span>
+    <!-- Header -->
+    <div class="header">
+      <div class="brand">
+        <div class="brand-icon">⚡</div>
+        Pulse
       </div>
-
+      <div class="header-right">
+        <div class="points-pill">
+          <svg viewBox="0 0 24 24"><path d="M12 2l2.3 6.8L21 10l-5.2 3.8L17.7 21 12 17.2 6.3 21l1.4-7.2L2.5 10l6.7-1.2z"/></svg>
+          <span id="pointsDisplay">1,240</span>
+        </div>
+        <div class="avatar">M</div>
+      </div>
     </div>
 
-    <div class="header-right">
+    <!-- Price Card -->
+    <div class="card">
+      <div class="price-header">
+        <div class="coin-tag">
+          <div class="coin-icon">₿</div>
+          BITCOIN / USD
+        </div>
+        <div class="live-badge"><span class="live-dot"></span>LIVE</div>
+      </div>
+      <div class="price-row">
+        <div>
+          <div class="price-main" id="priceMain">$68,450.75</div>
+          <div class="price-change up" id="priceChange">+0.5%</div>
+        </div>
+        <svg class="sparkline" id="sparkline" viewBox="0 0 100 40" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
 
-      <div class="points-pill">
-        ⭐ <span id="headerPoints">1,240</span>
-      
+    <!-- Timer Card -->
+    <div class="card">
+      <div class="timer-section">
+        <div class="timer-ring-wrap">
+          <svg class="timer-ring-svg" viewBox="0 0 140 140">
+            <circle class="timer-ring-bg" cx="70" cy="70" r="60"/>
+            <circle class="timer-ring-fill" id="ringFill" cx="70" cy="70" r="60"
+              stroke="url(#ringGradient)" stroke-dasharray="377" stroke-dashoffset="0"/>
+          </svg>
+          <div class="timer-center">
+            <div class="timer-label">Round ends in</div>
+            <div class="timer-value" id="timerValue">00:30</div>
+          </div>
+        </div>
+        <div class="time-selector">
+          <button class="time-btn" onclick="selectTime(30, 5, this)">
+            30s
+            <span class="reward">+5 PTS</span>
+          </button>
+          <button class="time-btn active" onclick="selectTime(60, 10, this)">
+            1m
+            <span class="reward">+10 PTS</span>
+          </button>
+          <button class="time-btn" onclick="selectTime(120, 20, this)">
+            2m
+            <span class="reward">+20 PTS</span>
+          </button>
+          <button class="time-btn" onclick="selectTime(300, 50, this)">
+            5m
+            <span class="reward">+50 PTS</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="actions" id="actionArea">
+      <button class="btn btn-up" onclick="placePrediction('up')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <path d="M12 19V5m0 0l-7 7m7-7l7 7"/>
+        </svg>
+        <span class="btn-label">UP</span>
+        <span class="btn-sub">Price will rise</span>
+      </button>
+      <button class="btn btn-down" onclick="placePrediction('down')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <path d="M12 5v14m0 0l-7-7m7 7l7-7"/>
+        </svg>
+        <span class="btn-label">DOWN</span>
+        <span class="btn-sub">Price will fall</span>
+      </button>
+    </div>
+
+    <!-- Locked State (initially hidden) -->
+    <div class="card locked-card" id="lockedCard">
+      <div class="locked-icon">🔒</div>
+      <div class="locked-title">Prediction Locked</div>
+      <div class="locked-dir">You picked <strong id="lockedDir" style="color: var(--accent);">UP</strong></div>
+      <div class="locked-timer" id="lockedTimer">00:30</div>
+    </div>
+
+    <!-- Last Rounds -->
+    <div class="section-title">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      Last Rounds
+    </div>
+    <div class="rounds-list" id="roundsList">
+      <!-- Rounds will be inserted here -->
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <button class="nav-item active">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1"/>
+      </svg>
+      Predict
+    </button>
+    <button class="nav-item">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+      </svg>
+      Leaderboard
+    </button>
+    <button class="nav-item">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+      </svg>
+      Profile
+    </button>
+  </div>
+
+  <!-- Result Overlay -->
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result-icon" id="resultIcon">🎉</div>
+    <div class="result-title" id="resultTitle">You Won!</div>
+    <div class="result-details" id="resultDetails">BTC went UP</div>
+    <div class="result-points" id="resultPoints">+10 Points</div>
+    <button class="btn-close" onclick="closeResult()">Continue</button>
+  </div>
+
+  <script>
+    // ========== State ==========
+    const state = {
+      currentPrice: 68450.75,
+      priceHistory: [],
+      selectedTime: 60,       // seconds
+      selectedReward: 10,     // points
+      timerInterval: null,
+      lockedDirection: null,
+      points: 1240,
+      roundCount: 0,
+      isLocked: false,
+      rounds: []
+    };
+
+    // ========== DOM Elements ==========
+    const priceMain = document.getElementById('priceMain');
+    const priceChange = document.getElementById('priceChange');
+    const sparklineEl = document.getElementById('sparkline');
+    const timerValue = document.getElementById('timerValue');
+    const ringFill = document.getElementById('ringFill');
+    const actionArea = document.getElementById('actionArea');
+    const lockedCard = document.getElementById('lockedCard');
+    const lockedDir = document.getElementById('lockedDir');
+    const lockedTimer = document.getElementById('lockedTimer');
+    const roundsList = document.getE
